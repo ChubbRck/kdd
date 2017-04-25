@@ -1,0 +1,184 @@
+
+// Z-Index
+
+$z-index-base: 1;
+$z-index-mid: 2;
+$z-index-high: 3;
+$z-index-uber: 4;
+
+
+// Design sizes
+
+$lgdesktop-design: 1440px;
+$smdesktop-design: 1024px;
+$tablet-design: 768px;
+$mobile-design: 320px;
+
+
+// Breakpoints
+
+$lgdesktop-breakpoint: 1440px;
+$smdesktop-breakpoint: 1200px;
+$tablet-breakpoint: 1023px;
+$mobile-breakpoint: 600px;
+
+
+// Media Queries
+
+$lgdesktop-query: 'only screen and (max-width: ' + $lgdesktop-breakpoint + ')';
+$smdesktop-query: 'only screen and (max-width: ' + $smdesktop-breakpoint + ')';
+$tablet-query: 'only screen and (max-width: ' + $tablet-breakpoint + ')';
+$mobile-query: 'only screen and (max-width: ' + $mobile-breakpoint + ')';
+
+
+// Colors
+
+
+
+// Fonts
+
+// $header-font: "Custom Font", sans-serif;
+// $body-font: "Custom Font", sans-serif;
+@font-face {
+  font-family: 'BrownStd-Regular';
+  src: url('../fonts/BrownStd-Regular.eot');
+  src: url('../fonts/BrownStd-Regular.woff2') format('woff2'),
+       url('../fonts/BrownStd-Regular.woff') format('woff'),
+       url('../fonts/BrownStd-Regular.ttf') format('truetype'),
+       url('../fonts/BrownStd-Regular.svg#BrownStd-Regular') format('svg'),
+       url('BrownStd-Regular.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Conv_Mercury-TextG1Italic';
+  src: url('../fonts/Conv_Mercury-TextG1Italic.eot');
+  src: url('../fonts/Conv_Mercury-TextG1Italic.woff2') format('woff2'),
+       url('../fonts/Conv_Mercury-TextG1Italic.woff') format('woff'),
+       url('../fonts/Conv_Mercury-TextG1Italic.ttf') format('truetype'),
+       url('../fonts/Conv_Mercury-TextG1Italic.svg#Conv_Mercury-TextG1Italic') format('svg'),
+       url('Conv_Mercury-TextG1Italic.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Mixins
+
+@mixin transition( $transition... ) {
+	transition: $transition;
+	-webkit-transition: $transition;
+	-moz-transition: $transition;
+	-ms-transition: $transition;
+	-o-transition: $transition;
+}
+
+@mixin transform( $transform... ) {
+	transform: $transform;
+	-webkit-transform: $transform;
+	-moz-transform: $transform;
+	-ms-transform: $transform;
+	-o-transform: $transform;
+}
+
+@mixin clearfix {
+	*zoom: 1;
+	&:before, &:after { display: table; content: ""; }
+	&:after { clear: both; }
+}
+
+@mixin aspect-ratio($ratio-or-width, $height: null) {
+    $padding: if($height, percentage($height/$ratio-or-width), percentage(1/$ratio-or-width));
+    &:before { content:''; display: table-row; float: left; padding-bottom: $padding;  }
+    &:after  { content:''; display: table; clear: both;  } 
+}
+
+@mixin placeholder($color, $fontsize, $lineheight){
+	&::-webkit-input-placeholder { color: $color; font-size: $fontsize; line-height: $lineheight; text-transform: uppercase }
+	&:-moz-placeholder { color: $color; font-size: $fontsize; line-height: $lineheight; text-transform: uppercase }
+	&::-moz-placeholder { color: $color; font-size: $fontsize; line-height: $lineheight; text-transform: uppercase }
+	&:-ms-input-placeholder { color: $color; font-size: $fontsize; line-height: $lineheight; text-transform: uppercase }
+}
+
+@mixin responsive-font( $window, $font, $min: false, $max: false ) {
+
+	$responsive-unitless: $font / ( $window / 100 );
+	$responsive: $responsive-unitless + vw;
+
+	@if $min {
+		$min-breakpoint: $min / $responsive-unitless * 100;
+
+		@media (max-width: #{$min-breakpoint}) {
+			font-size: $min;
+		}
+	}
+
+	@if $max {
+		$max-breakpoint: $max / $responsive-unitless * 100;
+
+		@media (min-width: #{$max-breakpoint}) {
+			font-size: $max;
+		}
+	}
+
+	font-size: $font;
+	font-size: $responsive;
+}
+
+@mixin middle {
+	width: 100%;
+	position: absolute;
+	max-height: 100%;
+	max-width: 100%;
+	top: 50%;
+	left: 50%;
+	@include transform( translate(-50%, -50%) );
+}
+
+
+// Functions
+
+@function rv( $window, $value  ) {
+
+	$design-width: $window;
+
+	@if $window == l {
+		$design-width: $lgdesktop-design;
+	} @else if $window == s {
+		$design-width: $smdesktop-design;
+	} @else if $window == t {
+		$design-width: $tablet-design;
+	} @else if $window == m {
+		$design-width: $mobile-design;
+	}
+
+	$responsive-unitless: $value / ( $design-width / 100 );
+	$responsive: $responsive-unitless + vw;
+	@return $responsive;
+
+}
+
+
+// Utility classes
+
+.middle {
+	@include middle;
+}
+
+.clearfix {
+	@include clearfix;
+}
+
+.float-right,
+[class^="col-"].float-right, 
+[class*=" col-"].float-right {
+	float: right;
+}
+
+.hidden {
+	display: none;
+}
+
+.centered {
+	text-align: center;
+}
